@@ -5,8 +5,8 @@ defmodule Emoji.Transformer do
 
   # extract data from file
   def transform_file do
-    Path.absname("./temp/emoji-full-list.html")
-    # Path.absname("./temp/sample.html")
+    # Path.absname("./temp/emoji-full-list.html")
+    Path.absname("./temp/sample.html")
     |> File.stream!()
     |> Stream.transform(0, &transformer/2)
     |> Enum.into(File.stream!("output.txt"))
@@ -46,16 +46,7 @@ defmodule Emoji.Transformer do
   defp handle_line("<tr><td class='rchars'>" <> rest, accu) do
     number = get_emoji_number(rest)
 
-    emoji = Map.get(accu, :emoji)
-    |> save_emoji
-
-    case emoji do
-      nil ->
-        Map.put(accu, :emoji, %{number: number, support_counter: 0})
-      emoji ->
-        {emoji, Map.put(accu, :emoji, %{number: number, support_counter: 0})}
-    end
-    
+    Map.put(accu, :emoji, %{number: number, support_counter: 0})
   end
 
   # emoji code
@@ -86,11 +77,24 @@ defmodule Emoji.Transformer do
   end
  
 
+  # this is the last needed line for the emoji,
+  # we can save at this point
   defp handle_line("<td class='name'>" <> rest, %{emoji: emoji} = accu) do
     name = get_emoji_name(rest)
 
-    emoji = Map.put(emoji, :name, name)
-    Map.put(accu, :emoji, emoji)
+    emoji = emoji
+      |> Map.put(:name, name)
+      |> Map.put(:category, accu.category)
+      |> Map.put(:sub_category, accu.sub_category)
+      |> save_emoji
+
+    case emoji do
+      nil ->
+        accu
+      emoji ->
+        {emoji, accu}
+    end
+    
   end
   
   defp handle_line(_, accu) do
@@ -113,11 +117,10 @@ defmodule Emoji.Transformer do
   end
 
   defp save_emoji(%{support_counter: supported_platforms} = emoji) when supported_platforms >= 6 do
-    # IO.inspect emoji
     emoji.emoji
   end
 
-  defp save_emoji(%{name: name}) do
+  defp save_emoji(_) do
     nil
   end
 
