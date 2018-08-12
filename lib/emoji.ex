@@ -10,4 +10,11 @@ defmodule Emoji do
   # extracts the emojis from the emoji-list html file
   defdelegate transform_file, to: Emoji.Transformer
 
+  def search_emoji(search_text) do
+    start_time = :os.system_time(:millisecond)
+    emojis = Emoji.Store.search_emoji(search_text)
+    IO.puts "Queries took: #{:os.system_time(:millisecond) - start_time}"
+    emojis
+  end
+
 end

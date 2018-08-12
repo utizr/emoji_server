@@ -3,15 +3,21 @@ defmodule Emoji.Transformer do
   Documentation for Emoji.
   """
 
+  alias Emoji.Store
+
   # extract data from file
   def transform_file do
-    # Path.absname("./temp/emoji-full-list.html")
-    Path.absname("./temp/sample.html")
+    Store.initialize_store()
+    result = Path.absname("./temp/emoji-full-list.html")
+    # result = Path.absname("./temp/sample.html")
     |> File.stream!()
     |> Stream.transform(0, &transformer/2)
-    |> Enum.into(File.stream!("output.txt"))
+    # |> Enum.into(File.stream!("output.txt"))
+    |> Enum.join("\n")
     # |> Stream.run()
     IO.puts "All Done!"
+    IO.puts result
+    "ok"
   end
   
   defp transformer(line, 0) do
@@ -117,6 +123,7 @@ defmodule Emoji.Transformer do
   end
 
   defp save_emoji(%{support_counter: supported_platforms} = emoji) when supported_platforms >= 6 do
+    Store.insert(:emoji, emoji.code, emoji)
     emoji.emoji
   end
 
