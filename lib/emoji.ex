@@ -1,0 +1,105 @@
+defmodule Emoji do
+  @moduledoc """
+  Documentation for Emoji.
+  """
+  @user_agent [{"User-agent", "chrome"}]
+
+  defp url do
+    "https://unicode.org/emoji/charts/full-emoji-list.html"
+  end
+
+  # download the emoji data
+  def get_data do
+    url()
+    |> HTTPoison.get(@user_agent)
+    |> handle_response
+    |> write_to_file
+  end
+
+  # get head and check last modification date
+  def get_head do
+    url()
+    |> HTTPoison.head!(@user_agent)
+    |> get_last_modified
+    |> IO.puts
+  end
+
+  defp get_last_modified(%HTTPoison.Response{headers: headers}) do
+    {"Last-Modified", date} = Enum.find(headers, fn {name, _} -> name == "Last-Modified" end)
+    date
+  end
+
+  defp handle_response({:ok, %{status_code: 200, body: body}}) do
+    body
+  end
+
+  defp write_to_file(data) do
+    Path.absname("./emoji-full-list.html")
+    |> File.write(data)
+  end
+
+  # extract data from file
+  def transform_file do
+    # Path.absname("./emoji-full-list.html")
+    Path.absname("./sample.html")
+    |> File.stream!()
+    |> Stream.transform(0, &transformer/2)
+    |> Enum.into(File.stream!("output.txt"))
+  end
+  
+  defp transformer(line, 0) do
+    transformer(line, %{})
+  end
+
+  defp transformer(line, accu) do
+    accu = handle_line(line, accu)
+    # IO.puts "accu"
+    # IO.inspect accu
+    {[], accu}
+  end
+
+  # main Category
+  defp handle_line("<tr><th colspan='15' class='bighead'>" <> rest, accu) do
+    title = get_title(rest)
+    IO.puts "Category: \t\t#{title}"
+    Map.put(accu, :category, title)
+  end
+
+  # sub Category
+  defp handle_line("<tr><th colspan='15' class='mediumhead'>" <> rest, accu) do
+    title = get_title(rest)
+    IO.puts "Sub Category: \t#{title}"
+    Map.put(accu, :sub_category, title)
+  end
+
+  # emoji number
+  defp handle_line("<tr><td class='rchars'>" <> rest, accu) do
+    number = get_emoji_number(rest)
+    IO.puts "Number: \t#{number}"
+    accu
+  end
+
+  defp handle_line(_, accu) do
+    accu
+  end
+
+  defp get_title(line) do
+    case Regex.named_captures(~r/>(?<title>[^>]*)<\/a>/, line) do
+      %{"title" => title} ->
+        title 
+          |> String.replace("&amp;","and") 
+          |> String.replace("-"," ") 
+      _ ->
+        "not_found"
+    end
+  end
+
+  defp get_emoji_number(line) do
+    case Regex.named_captures(~r/^(?<emoji_number>[0-9]*)<\/td>/, line) do
+      %{"emoji_number" => number} ->
+        number
+      _ ->
+        "number_not_found"
+    end
+  end
+end
