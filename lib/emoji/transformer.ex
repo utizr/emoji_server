@@ -47,6 +47,7 @@ defmodule Emoji.Transformer do
     Map.put(accu, :sub_category, title)
   end
 
+  # TODO can be removed
   # emoji number
   # this is the first entry point to an emoji
   defp handle_line("<tr><td class='rchars'>" <> rest, accu) do
@@ -111,8 +112,10 @@ defmodule Emoji.Transformer do
     case Regex.named_captures(~r/>(?<title>[^>]*)<\/a>/, line) do
       %{"title" => title} ->
         title 
-          |> String.replace("&amp;","and") 
-          |> String.replace("-"," ") 
+          |> String.replace("&amp;","and")
+          |> String.replace("-"," ")
+          |> String.replace("⊛", "")
+
       _ ->
         "not_found"
     end
