@@ -93,6 +93,7 @@ defmodule Emoji.Transformer do
       |> Map.put(:name, name)
       |> Map.put(:category, accu.category)
       |> Map.put(:sub_category, accu.sub_category)
+      |> Map.put(:all_text, "#{accu.category} #{accu.sub_category} #{name}" |> String.downcase)
       |> save_emoji
 
     case emoji do

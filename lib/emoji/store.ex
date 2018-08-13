@@ -14,13 +14,13 @@ defmodule Emoji.Store do
   end
 
   def search_emoji(search_text) do
+    search_words = create_words(search_text)
+
     :ets.tab2list(:emoji)
     |> Enum.reduce([], fn entry, accu ->
       {_, emoji} = entry
 
-      all_text = [emoji.category, emoji.sub_category, emoji.name]
-        |> Enum.join(" ")
-      case find_in_text(all_text, search_text) do
+      case find_words_in_text(emoji.all_text, search_words) do
         true ->
           [emoji | accu]
         false ->
@@ -29,19 +29,19 @@ defmodule Emoji.Store do
     end)
   end
 
-  defp find_in_text(source_string, search_text) do
+  defp create_words(search_text) do
     words = search_text
     |> String.trim()
     |> String.replace(~r/\s{2,}/, " ") # replace multiple spaces with one space
     |> String.replace(~r/[^\p{L} ]/, "") # remove everything but chars (including foreign chars) and spaces
     |> String.downcase
     |> String.split(" ")
+  end
 
-    reg_string = Enum.map(words, fn word -> "(?=.*#{word})" end)
-    |> Enum.join("")
-
-    source_string = source_string |> String.downcase
-    source_string =~ ~r/#{reg_string}/
+  defp find_words_in_text(source_string, words) do
+    Enum.reduce(words, true, fn word, result -> 
+      (source_string =~ word) and result
+    end)
   end
 
 end
