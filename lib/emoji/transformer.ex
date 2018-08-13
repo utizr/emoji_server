@@ -8,15 +8,11 @@ defmodule Emoji.Transformer do
   # extract data from file
   def transform_file do
     Store.initialize_store()
-    result = Path.absname("./temp/emoji-full-list.html")
-    # result = Path.absname("./temp/sample.html")
+    Path.absname("./temp/emoji-full-list.html")
     |> File.stream!()
     |> Stream.transform(0, &transformer/2)
-    # |> Enum.into(File.stream!("output.txt"))
-    |> Enum.join("\n")
-    # |> Stream.run()
+    |> Stream.run()
     IO.puts "All Done!"
-    IO.puts result
     "ok"
   end
   
