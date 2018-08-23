@@ -12,7 +12,7 @@ defmodule Emoji do
 
   # defdelegate search_emoji(search_text), to: Emoji.Store
 
-  def search_emoji(search_text) do
+  def search(search_text) do
     start_time = :os.system_time(:millisecond)
     emojis = Emoji.Store.search_emoji(search_text)
     end_time = :os.system_time(:millisecond)

@@ -22,6 +22,7 @@ defmodule Emoji.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.13.0"},
+      {:timex, "~> 3.1"}
     ]
   end
 end

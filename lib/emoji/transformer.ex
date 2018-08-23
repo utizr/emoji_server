@@ -1,8 +1,4 @@
 defmodule Emoji.Transformer do
-  @moduledoc """
-  Documentation for Emoji.
-  """
-
   alias Emoji.Store
 
   # extract data from file
