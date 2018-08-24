@@ -7,7 +7,20 @@ defmodule Emoji.Fetcher do
   @html_file "emoji-full-list.html"
   @date_file "last_mod_date.txt"
 
-
+  def start() do
+    with :data_outdated <- local_data_up_to_date?(),
+      {:ok, mod_date} <- get_head(),
+      :ok <- write_last_modified_to_file(mod_date),
+      :ok <- get_data()
+    do
+      IO.puts "Data loaded successfully."
+    else
+      :data_uptodate ->
+        IO.puts "Data up to date!"
+      _ ->
+        IO.puts "unknown error occured at fetching data"
+    end
+  end
 
   # get head and check last modification date
   def get_head do
@@ -25,19 +38,15 @@ defmodule Emoji.Fetcher do
     |> write_to_file
   end
 
-
-
-  def data_updated? do
+  def local_data_up_to_date? do
     with {:ok, saved_date} <- get_saved_date(),
       {:ok, mod_date} <- get_head(),
       true <- up_to_date?(saved_date, mod_date)
     do
-      IO.puts "Local Data up to date."
-      :ok
+      :data_uptodate
     else
       _ ->
-        IO.puts "Data needs to be fetched."
-        :error
+        :data_outdated
     end
   end
 
@@ -64,7 +73,7 @@ defmodule Emoji.Fetcher do
     :error
   end
 
-  defp write_date_to_file(date) do
+  defp write_last_modified_to_file(date) do
     Path.absname("#{@folder}#{@date_file}")
     |> File.write(date)
   end

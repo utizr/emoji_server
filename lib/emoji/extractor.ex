@@ -1,22 +1,23 @@
-defmodule Emoji.Transformer do
+defmodule Emoji.Extractor do
   alias Emoji.Store
 
   # extract data from file
-  def transform_file do
+  def extract_data_from_file do
+    IO.puts "Extracting emojis from html file.."
     Store.initialize_store()
     Path.absname("./temp/emoji-full-list.html")
     |> File.stream!()
-    |> Stream.transform(0, &transformer/2)
+    |> Stream.transform(0, &extractor/2)
     |> Stream.run()
-    IO.puts "All Done!"
+    IO.puts "Extraction completed, you can start querying!"
     "ok"
   end
   
-  defp transformer(line, 0) do
-    transformer(line, %{})
+  defp extractor(line, 0) do
+    extractor(line, %{})
   end
 
-  defp transformer(line, accu) do
+  defp extractor(line, accu) do
     {line, accu} = case handle_line(line, accu) do
       {emoji, accu} ->
         {[emoji], accu}
