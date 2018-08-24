@@ -1,11 +1,14 @@
 defmodule Emoji.Extractor do
   alias Emoji.Store
 
+  @folder "./assets/"
+  @html_file "emoji-full-list.html"
+
   # extract data from file
   def extract_data_from_file do
     IO.puts "Extracting emojis from html file.."
     Store.initialize_store()
-    Path.absname("./temp/emoji-full-list.html")
+    Path.absname("#{@folder}#{@html_file}")
     |> File.stream!()
     |> Stream.transform(0, &extractor/2)
     |> Stream.run()

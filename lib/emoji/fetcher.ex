@@ -3,14 +3,12 @@ defmodule Emoji.Fetcher do
   Documentation for Emoji.
   """
   @user_agent [{"User-agent", "chrome"}]
-  @folder "./temp/"
+  @folder "./assets/"
   @html_file "emoji-full-list.html"
   @date_file "last_mod_date.txt"
 
   def start() do
     with :data_outdated <- local_data_up_to_date?(),
-      {:ok, mod_date} <- get_head(),
-      :ok <- write_last_modified_to_file(mod_date),
       :ok <- get_data()
     do
       IO.puts "Data loaded successfully."
@@ -26,12 +24,12 @@ defmodule Emoji.Fetcher do
   def get_head do
     url()
     |> HTTPoison.head!(@user_agent)
-    |> get_last_modified
+    |> extract_last_modified
   end
 
   # download the emoji data
   def get_data do
-    IO.puts "fetching..."
+    IO.puts "fetching data..."
     url()
     |> HTTPoison.get(@user_agent)
     |> handle_response
@@ -64,12 +62,12 @@ defmodule Emoji.Fetcher do
     "https://unicode.org/emoji/charts/full-emoji-list.html"
   end
 
-  defp get_last_modified(%HTTPoison.Response{headers: headers}) do
+  defp extract_last_modified(%HTTPoison.Response{headers: headers}) do
     {"Last-Modified", date} = Enum.find(headers, fn {name, _} -> name == "Last-Modified" end)
     {:ok, date}
   end
 
-  defp get_last_modified(_) do
+  defp extract_last_modified(_) do
     :error
   end
 
@@ -82,8 +80,10 @@ defmodule Emoji.Fetcher do
     Timex.parse!(date_str, "{RFC1123}")
   end
 
-  defp handle_response({:ok, %{status_code: 200, body: body}}) do
+  defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
     IO.puts "fetch Completed, replacing inline images to reduce size.."
+    {:ok, mod_date} = extract_last_modified(response)
+    write_last_modified_to_file(mod_date)
     Regex.replace(~r/'data:.*'/, body, "yyy")
   end
 
