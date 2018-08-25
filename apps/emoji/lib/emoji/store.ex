@@ -22,6 +22,7 @@ defmodule Emoji.Store do
 
       case find_words_in_text(emoji.all_text, search_words) do
         true ->
+          emoji = Map.take(emoji, [:name,:emoji,:category,:sub_category])
           [emoji | accu]
         false ->
           accu
