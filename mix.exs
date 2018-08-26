@@ -15,6 +15,6 @@ defmodule EmojiServer.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    []
+    [{:distillery, "~> 2.0"}]
   end
 end
