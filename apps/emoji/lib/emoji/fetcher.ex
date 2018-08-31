@@ -1,4 +1,5 @@
 defmodule Emoji.Fetcher do
+  require Logger
   @moduledoc """
   Documentation for Emoji.
   """
@@ -11,12 +12,15 @@ defmodule Emoji.Fetcher do
     with :data_outdated <- local_data_up_to_date?(),
       :ok <- get_data()
     do
-      IO.puts "Data loaded successfully."
+      Logger.info "Data loaded successfully."
+      :data_refreshed
     else
       :data_uptodate ->
-        IO.puts "Data up to date!"
+        Logger.info "Data up to date!"
+        :data_uptodate
       _ ->
-        IO.puts "unknown error occured at fetching data"
+        Logger.info "unknown error occured at fetching data"
+        :error
     end
   end
 
@@ -29,7 +33,7 @@ defmodule Emoji.Fetcher do
 
   # download the emoji data
   def get_data do
-    IO.puts "fetching data..."
+    Logger.info "fetching data..."
     url()
     |> HTTPoison.get(@user_agent)
     |> handle_response
@@ -81,14 +85,14 @@ defmodule Emoji.Fetcher do
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body} = response}) do
-    IO.puts "fetch Completed, replacing inline images to reduce size.."
+    Logger.info "fetch Completed, replacing inline images to reduce size.."
     {:ok, mod_date} = extract_last_modified(response)
     write_last_modified_to_file(mod_date)
     Regex.replace(~r/'data:.*'/, body, "yyy")
   end
 
   defp write_to_file(data) do
-    IO.puts "replace completed, saving.."
+    Logger.info "replace completed, saving.."
     Path.absname("#{@folder}#{@html_file}")
     |> File.write(data)
   end

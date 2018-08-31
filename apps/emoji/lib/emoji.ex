@@ -1,4 +1,5 @@
 defmodule Emoji do
+  require Logger
 
   # fetches head data of the emoji-list html
   defdelegate get_head, to: Emoji.Fetcher
@@ -11,7 +12,7 @@ defmodule Emoji do
     start_time = :os.system_time(:millisecond)
     emojis = Emoji.Store.search_emoji(search_text)
     end_time = :os.system_time(:millisecond)
-    IO.puts "Queries took: #{end_time - start_time}"
+    Logger.info "Queries took: #{end_time - start_time}"
     emojis
   end
 
@@ -19,7 +20,7 @@ defmodule Emoji do
     start_time = :os.system_time(:millisecond)
     emojis = Emoji.Store.search_emoji(search_text, opts)
     end_time = :os.system_time(:millisecond)
-    IO.puts "Queries took: #{end_time - start_time}"
+    Logger.info "Queries took: #{end_time - start_time}"
     emojis
   end
 

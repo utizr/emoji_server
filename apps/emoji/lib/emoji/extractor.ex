@@ -1,18 +1,19 @@
 defmodule Emoji.Extractor do
   alias Emoji.Store
+  require Logger
 
   @folder "./assets/"
   @html_file "emoji-full-list.html"
 
   # extract data from file
   def extract_data_from_file do
-    IO.puts "Extracting emojis from html file.."
+    Logger.info "Extracting emojis from html file.."
     Store.initialize_store()
     Path.absname("#{@folder}#{@html_file}")
     |> File.stream!()
     |> Stream.transform(0, &extractor/2)
     |> Stream.run()
-    IO.puts "Extraction completed, you can start querying!"
+    Logger.info "Extraction completed (#{Store.count()}), you can start querying!"
     "ok"
   end
   
