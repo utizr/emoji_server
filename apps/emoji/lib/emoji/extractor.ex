@@ -43,7 +43,7 @@ defmodule Emoji.Extractor do
     Map.put(accu, :sub_category, title)
   end
 
-  # TODO can be removed
+  # TODO can be removed, the number is useless
   # emoji number
   # this is the first entry point to an emoji
   defp handle_line("<tr><td class='rchars'>" <> rest, accu) do
@@ -70,7 +70,7 @@ defmodule Emoji.Extractor do
     Map.put(accu, :emoji, emoji)
   end
  
-  # check supported platforms
+  # check supported platform count
   defp handle_line("<td class='andr" <> rest, %{emoji: emoji} = accu) do
     support_counter = emoji.support_counter
     support_counter = support_counter + get_support_count(rest)
@@ -118,6 +118,8 @@ defmodule Emoji.Extractor do
     end
   end
 
+  # TODO probably better to move the saving of emoji to a new stream when all emojis
+  # are extracted.
   defp save_emoji(nil) do
     nil
   end

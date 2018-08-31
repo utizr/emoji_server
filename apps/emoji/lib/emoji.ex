@@ -7,10 +7,17 @@ defmodule Emoji do
   # extracts the emojis from the emoji-list html file
   defdelegate extract_data_from_file, to: Emoji.Extractor
 
-  # defdelegate search_emoji(search_text), to: Emoji.Store
   def search(search_text) do
     start_time = :os.system_time(:millisecond)
     emojis = Emoji.Store.search_emoji(search_text)
+    end_time = :os.system_time(:millisecond)
+    IO.puts "Queries took: #{end_time - start_time}"
+    emojis
+  end
+
+  def search(search_text, opts) do
+    start_time = :os.system_time(:millisecond)
+    emojis = Emoji.Store.search_emoji(search_text, opts)
     end_time = :os.system_time(:millisecond)
     IO.puts "Queries took: #{end_time - start_time}"
     emojis

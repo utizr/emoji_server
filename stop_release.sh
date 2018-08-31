@@ -1,1 +1,1 @@
-_build/dev/rel/emoji_server/bin/emoji_server stop
+_build/prod/rel/emoji_server/bin/emoji_server stop

@@ -36,7 +36,7 @@ defmodule Emoji.Fetcher do
     |> write_to_file
   end
 
-  def local_data_up_to_date? do
+  defp local_data_up_to_date? do
     with {:ok, saved_date} <- get_saved_date(),
       {:ok, mod_date} <- get_head(),
       true <- up_to_date?(saved_date, mod_date)
