@@ -33,7 +33,7 @@ defmodule Emoji.Fetcher do
 
   # download the emoji data
   def get_data do
-    Logger.info "fetching data..."
+    Logger.info "Fetching data..."
     url()
     |> HTTPoison.get(@user_agent)
     |> handle_response
@@ -48,6 +48,7 @@ defmodule Emoji.Fetcher do
       :data_uptodate
     else
       _ ->
+        Logger.info "Data outdated.."
         :data_outdated
     end
   end

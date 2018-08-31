@@ -29,8 +29,11 @@ defmodule Emoji.Worker do
     case Emoji.Fetcher.start() do
       :data_uptodate ->
         :ok
-      :data_updated ->
+      :data_refreshed ->
         extract_from_local_copy()
+      :error ->
+        Logger.error "Unknown error occured at updating emojis."
+        :error
     end
     schedule(:update_emojis)
   end
