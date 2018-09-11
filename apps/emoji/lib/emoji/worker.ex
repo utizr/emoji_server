@@ -49,18 +49,11 @@ defmodule Emoji.Worker do
     Process.send_after(self(), :update_emojis, hour_millis() * 24)
   end
 
-  def minute_millis() do
-    1000 * 60
-  end
+  def minute_millis(), do: 1000 * 60
 
-  def hour_millis() do
-    1000 * 60 * 60
-  end
+  def hour_millis(), do: 1000 * 60 * 60
 
-  def day_millis() do
-    hour_millis() * 24
-  end
-
+  def day_millis(), do: hour_millis() * 24
 
   def handle_info(:update_emojis, state) do
     Logger.info "Starting scheduled update of emojis.."

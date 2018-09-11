@@ -8,6 +8,9 @@ defmodule Emoji.Fetcher do
   @html_file "emoji-full-list.html"
   @date_file "last_mod_date.txt"
 
+  @doc ~S"""
+  Boots up the emojis
+  """
   def start() do
     with :data_outdated <- local_data_up_to_date?(),
       :ok <- get_data()
@@ -24,14 +27,18 @@ defmodule Emoji.Fetcher do
     end
   end
 
-  # get head and check last modification date
+  @doc ~S"""
+  get head and check last modification date
+  """
   def get_head do
     url()
     |> HTTPoison.head!(@user_agent)
     |> extract_last_modified
   end
 
-  # download the emoji data
+  @doc ~S"""
+  download the emoji data
+  """
   def get_data do
     Logger.info "Fetching data..."
     url()
@@ -89,7 +96,7 @@ defmodule Emoji.Fetcher do
     Logger.info "fetch Completed, replacing inline images to reduce size.."
     {:ok, mod_date} = extract_last_modified(response)
     write_last_modified_to_file(mod_date)
-    Regex.replace(~r/'data:.*'/, body, "yyy")
+    Regex.replace(~r/'data:.*'/, body, "...")
   end
 
   defp write_to_file(data) do
