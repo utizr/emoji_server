@@ -19,7 +19,6 @@ defmodule API.Router.Emoji do
   
   get "/search/" do
     %Plug.Conn{params: %{"query" => search_text}} = conn
-    IO.inspect(search_text, label: "Emoji search text:")
     emojis = Emoji.search(search_text)
     conn
     |> put_resp_content_type("application/json")

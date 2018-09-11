@@ -12,7 +12,7 @@ defmodule Emoji do
     start_time = :os.system_time(:millisecond)
     emojis = Emoji.Store.search_emoji(search_text)
     end_time = :os.system_time(:millisecond)
-    Logger.info "Queries took: #{end_time - start_time}"
+    Logger.info "Queries took: #{end_time - start_time}ms"
     emojis
   end
 
@@ -20,7 +20,7 @@ defmodule Emoji do
     start_time = :os.system_time(:millisecond)
     emojis = Emoji.Store.search_emoji(search_text, opts)
     end_time = :os.system_time(:millisecond)
-    Logger.info "Queries took: #{end_time - start_time}"
+    Logger.info "Queries took: #{end_time - start_time}ms"
     emojis
   end
 
