@@ -2,7 +2,7 @@
 
 **TODO: Add description**
 
-## search in interactive mix session:
+## search in interactive shell:
 
 ```
 # iex -S mix
