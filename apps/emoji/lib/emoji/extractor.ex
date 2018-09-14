@@ -161,7 +161,7 @@ defmodule Emoji.Extractor do
           |> String.replace(".","")
         
       _ ->
-        "number_not_found"
+        "name_not_found"
     end
   end
   
