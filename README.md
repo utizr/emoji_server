@@ -28,7 +28,7 @@ curl localhost:8088/emoji/search/?query=racing+car
 
 ## docker usage:
 The docker file will build the release with distillery 2.0.
-You can then run the built docker image and expose port 8088 as in you can see below.
+You can then run the built docker image and expose port 8088 as in below example.
 
 ```
 docker build . -t emoji_server_image
