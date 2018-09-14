@@ -22,4 +22,4 @@ iex(1)> Emoji.search "racing car"
 
 ## Todo:
 
-- add option to not sync with the server, and only use the currenlty available emojis in the repo.
+- add option to not sync with the unicode website, and only use the currenlty available emojis on the server.
