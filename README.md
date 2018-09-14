@@ -1,6 +1,7 @@
 # EmojiServer
 
-**TODO: Add description**
+Emoji server providing a simple search API. It auto syncs with the unicode.org site to fetch latest emoji list.
+The idea is to only use emojis that are supported in all major operating system, and the unicode site provides this information.
 
 ## search in interactive shell:
 
@@ -22,5 +23,15 @@ iex(1)> Emoji.search "racing car"
 ## test search route:
 
 ```
-url localhost:8088/emoji/search/?query=racing+car
+curl localhost:8088/emoji/search/?query=racing+car
+```
+
+## docker usage:
+
+```
+docker build . -t emoji_server_image
+docker run -d --name emoji_server -p 8088:8088 emoji_server_image
+
+# then if you want to stop it: 
+docker stop emoji_server
 ```

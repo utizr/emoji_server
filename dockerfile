@@ -1,9 +1,7 @@
 FROM elixir:1.7.2
 
-EXPOSE 4000
 EXPOSE 8088
-ENV PORT=4000 \
-    MIX_ENV=prod
+ENV MIX_ENV=prod
 
 WORKDIR /app
 COPY . .

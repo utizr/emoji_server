@@ -1,21 +1,25 @@
 # Emoji
 
-**TODO: Add description**
+This app is responsible for syncing the emojis with the unicode.org site's emoji list.
+It checked every day if there was an update on the site making a head request and checking the modification date. If the modification date is different from the locally saved one, it will grab the content and saved it on disk along with the last modifictation date.
+After fetching the content, it will extract the emojis, and save them in :ets.
+The `Emoji` module provides an api to query the emojis. Usage example:
 
-## Installation
+```
+# iex -S mix
+iex(1)> Emoji.search "racing car"
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `emoji` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:emoji, "~> 0.1.0"}
-  ]
-end
+20:12:31.816 [info]  Queries took: 3ms
+[
+  %{
+    category: "Travel and Places",
+    emoji: "🏎",
+    name: "racing car",
+    sub_category: "transport ground"
+  }
+]
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/emoji](https://hexdocs.pm/emoji).
+## Todo:
 
+- add option to not sync with the server, and only use the currenlty available emojis in the repo.
