@@ -26,7 +26,7 @@ defmodule API.Router.Emoji do
   end
 
   get _ do
-    send_resp(conn, 404, "Not found users!")
+    send_resp(conn, 404, "Not found!")
   end
 
   @doc """
