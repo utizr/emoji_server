@@ -1,4 +1,9 @@
 defmodule Emoji.Worker do
+
+  @moduledoc """
+  Reponsible for triggering the fetcher and extractor every day to refresh the emoji list.
+  """
+  
   use GenServer
   require Logger
 

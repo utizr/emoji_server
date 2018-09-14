@@ -1,4 +1,11 @@
 defmodule Emoji.Extractor do
+  @moduledoc """
+  Reponsible for: 
+
+    - reading the html file in @folder/@html_file 
+    - extracting the emojis from the file
+    - saving the emojis into :ets
+  """
   alias Emoji.Store
   require Logger
 

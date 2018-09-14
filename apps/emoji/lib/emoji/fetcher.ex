@@ -1,7 +1,8 @@
 defmodule Emoji.Fetcher do
   require Logger
   @moduledoc """
-  Documentation for Emoji.
+  Reponsible for fetching the emoji list from the url() if it was modified 
+  since the date specified in the @date_file, and saving it to disc.
   """
   @user_agent [{"User-agent", "chrome"}]
   @folder "./assets/"

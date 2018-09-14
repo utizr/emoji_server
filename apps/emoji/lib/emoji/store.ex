@@ -1,7 +1,12 @@
-# for matching this should work "cat dog fish" =~ ~r/(?=.*dog)(?=.*cat)/
-# the idea is to add all emojis like this <emojicode>=tags of the emoji=
-
 defmodule Emoji.Store do
+
+  @moduledoc """
+  Reponsible for: 
+
+    - initializing the :ets store for the emojis
+    - saving emojis into :ets
+    - searching emojis
+  """
 
   def initialize_store() do
     if tab_info() == :undefined do
