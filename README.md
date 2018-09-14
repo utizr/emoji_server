@@ -1,6 +1,6 @@
 # EmojiServer
 
-Emoji server providing a simple search API. It auto syncs with the unicode.org site to fetch latest emoji list.
+Emoji server providing a simple search API. It auto syncs with the unicode.org site to fetch the latest emoji list.
 The idea is to only use emojis that are supported in all major operating system, and the unicode site provides this information.
 
 ## search in interactive shell:

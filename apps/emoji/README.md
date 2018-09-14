@@ -1,7 +1,7 @@
 # Emoji
 
 This app is responsible for syncing the emojis with the unicode.org site's emoji list.
-It checks every day if there was an update on the site making a head request and checking the modification date. If the modification date is different from the locally saved one, it will grab the content and saved it on disk along with the last modifictation date.
+It checks every day if there was an update on the site making a head request and checking the modification date. If the modification date is different from the locally saved one, it will fetch the content and saved it on disk along with the last modifictation date.
 After fetching the content, it will extract the emojis, and save them in :ets.
 The `Emoji` module provides an api to query the emojis. Usage example:
 
