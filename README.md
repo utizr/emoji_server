@@ -37,3 +37,17 @@ docker run -d --name emoji_server -p 8088:8088 emoji_server_image
 # then if you want to stop it: 
 docker stop emoji_server
 ```
+
+## building in docker for linux target
+If you are developing on MAC for example and would like to build the app for a linux server, you can also make use of docker.
+Just build the docker image which will create the linux artifacts, and copy the files out of docker to your machine.
+
+```
+# build the image as in the above step:
+docker build . -t emoji_server_image
+
+# cd into a folder where you would like to copy the _build folder to on your host machine and execute:
+docker run -v `pwd`:/linux-build -w /linux-build -i -t emoji_server_image cp -R /app/_build .
+
+# you will find the _build folder in your current directory
+```
